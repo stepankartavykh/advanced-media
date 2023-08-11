@@ -9,8 +9,8 @@ sites = [
 
 
 def get_data_sites():
-    # output = []
-    # for site in sites_addresses:
-    #     data_site = requests.get(url=site).json()
-    #     output.append(data_site)
-    return requests.get(url="https://www.rbc.ru/").json()
+    output = []
+    for site in sites:
+        data_site = requests.get(url=site).json()
+        output.append(data_site)
+    return requests.get(url="https://www.rbc.ru/").content.decode('utf-8')

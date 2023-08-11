@@ -1,5 +1,5 @@
 from flask import Flask
-from module import get_data_sites, sites
+from module import get_data_sites
 
 app = Flask(__name__)
 

@@ -11,6 +11,10 @@ def get_html_page(_url: str) -> str:
     return content
 
 
+def get_all_links_from_page():
+    pass
+
+
 def get_info(launch_code: str, time_between_requests: int) -> None:
     dir_path = f"pages_launch_{launch_code}"
     if not os.path.exists(dir_path):
@@ -26,4 +30,4 @@ def get_info(launch_code: str, time_between_requests: int) -> None:
 
 
 if __name__ == '__main__':
-    get_info("first_launch", 2)
+    get_info("third_launch", 2)
