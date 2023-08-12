@@ -11,7 +11,7 @@ def get_html_page(_url: str) -> str:
     return content
 
 
-def get_all_links_from_page():
+def get_all_links_from_page(html_code: str) -> list[str]:
     pass
 
 
