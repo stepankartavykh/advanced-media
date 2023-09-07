@@ -1,6 +1,6 @@
 """Module to work with one page. Parse and make some necessary operations to analyse the content of the page."""
 import requests
-
+from bs4 import BeautifulSoup
 from config import STORAGE_PATH
 
 
@@ -20,6 +20,29 @@ class PageHandler:
 
     def get_all_links_from_page(self) -> list[str]:
         """Get all available links on page. For next iteration of search."""
+        page = str(BeautifulSoup(self.content))
+
+        def get_url(page):
+            """
+
+            :param page: html of web page (here: Python home page)
+            :return: urls in that page
+            """
+            start_link = page.find("a href")
+            if start_link == -1:
+                return None, 0
+            start_quote = page.find('"', start_link)
+            end_quote = page.find('"', start_quote + 1)
+            url = page[start_quote + 1: end_quote]
+            return url, end_quote
+
+        while True:
+            url, n = get_url(page)
+            page = page[n:]
+            if url:
+                print(url)
+            else:
+                break
 
 
 if __name__ == '__main__':
