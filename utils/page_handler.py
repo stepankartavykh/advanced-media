@@ -15,39 +15,29 @@ class PageHandler:
         """Initialize page. Get page source HTML code."""
         self.url = page_url
         self.content = requests.get(page_url).content.decode('utf-8')
+        self.links = []
 
-    def generate_file_name(self, file_name):
+    def generate_file_path(self):
         storage_dir = config_parser['DEFAULT']['STORAGE_PATH']
-        return storage_dir + f'/{file_name}'
+        url_ = self.url.replace('/', '')
+        return storage_dir + f'/{url_}'
 
-    def write_page_source_code_to_file(self, path_to_file: str = None):
-        path = 'STORAGE_PATH'
-        if path_to_file:
-            path = path_to_file
+    def write_page_source_code_to_file(self):
+        path = self.generate_file_path()
         path = path + '.html'
         with open(path, 'w') as file_page:
             file_page.write(self.content)
 
     def get_all_links_from_page(self):
         """Get all available links on page. For next iteration of search."""
-        page = str(BeautifulSoup(self.content, features="html.parser"))
-
-        while True:
-            start_link = page.find("a href")
-            if start_link == -1:
-                return None, 0
-            start_quote = page.find('"', start_link)
-            end_quote = page.find('"', start_quote + 1)
-            founded_url = page[start_quote + 1: end_quote]
-
-            page = page[end_quote:]
-            if founded_url:
-                print(founded_url)
-            else:
-                break
+        soup = BeautifulSoup(self.content, features="html.parser")
+        for link in soup.find_all('a'):
+            self.links.append(link.get('href'))
 
 
 if __name__ == '__main__':
-    url_ = 'https://google.com'
-    google_handler = PageHandler(url=url_)
+    url = 'https://www.investing.com'
+    google_handler = PageHandler(page_url=url)
     google_handler.write_page_source_code_to_file()
+    google_handler.get_all_links_from_page()
+    print(google_handler.links)
