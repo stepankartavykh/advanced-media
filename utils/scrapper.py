@@ -2,6 +2,8 @@ import os
 import time
 import requests
 
+from utils import PageHandler
+
 
 url = "https://www.rbc.ru/"
 
@@ -27,6 +29,15 @@ def get_info(launch_code: str, time_between_requests: int) -> None:
             file_page.write(page_str)
         time.sleep(time_between_requests)
         i += 1
+
+
+def run_process():
+    start_url = 'https://www.investing.com/'
+    handler = PageHandler(start_url)
+    handler.get_all_links_from_page()
+    for link in handler.links:
+        internal_handler = PageHandler(link)
+        internal_handler.get_all_links_from_page()
 
 
 if __name__ == '__main__':
