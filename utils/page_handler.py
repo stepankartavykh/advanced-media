@@ -32,7 +32,9 @@ class PageHandler:
         """Get all available links on page. For next iteration of search."""
         soup = BeautifulSoup(self.content, features="html.parser")
         for link in soup.find_all('a'):
-            self.links.append(link.get('href'))
+            link_str: str = link.get('href')
+            if link_str and link_str != self.url and link_str.startswith('https://'):
+                self.links.append(link.get('href'))
 
 
 if __name__ == '__main__':
