@@ -31,14 +31,23 @@ def get_info(launch_code: str, time_between_requests: int) -> None:
         i += 1
 
 
-def run_process():
-    start_url = 'https://www.investing.com/'
-    handler = PageHandler(start_url)
-    handler.get_all_links_from_page()
-    for link in handler.links:
-        internal_handler = PageHandler(link)
-        internal_handler.get_all_links_from_page()
+def start(start_url):
+    added_links = set()
+
+    def run_process(incoming_url: str):
+        handler = PageHandler(incoming_url)
+        handler.get_all_links_from_page()
+        for link in handler.links:
+            if link not in added_links:
+                added_links.add(link)
+                print(link)
+                run_process(link)
+            # internal_handler = PageHandler(link)
+            # internal_handler.get_all_links_from_page()
+
+    run_process(start_url)
 
 
 if __name__ == '__main__':
-    get_info("third_launch", 2)
+    # get_info("third_launch", 2)
+    start("https://www.google.ru/")
