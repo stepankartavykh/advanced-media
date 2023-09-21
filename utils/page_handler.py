@@ -1,6 +1,7 @@
 """Module to work with one page. Parse and make some necessary operations to analyse the content of the page."""
 
 import requests
+import urllib
 from bs4 import BeautifulSoup
 import configparser
 
@@ -14,7 +15,12 @@ class PageHandler:
     def __init__(self, page_url):
         """Initialize page. Get page source HTML code."""
         self.url = page_url
-        self.content = requests.get(page_url).content.decode('utf-8')
+        try:
+            self.content = requests.get(page_url).content.decode('utf-8')
+        except UnicodeDecodeError:
+            pass
+            # resolved_url = urllib.request.urlopen(page_url).geturl()
+            # self.content = requests.get(resolved_url).content.decode('utf-8')
         self.links = []
 
     def generate_file_path(self):
