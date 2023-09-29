@@ -1,13 +1,23 @@
 """Module to work with one page. Parse and make some necessary operations to analyse the content of the page."""
 
-import requests
 from bs4 import BeautifulSoup
 import configparser
 from page_analyzer import Analyzer
-
+from utils.request_handler import RequestHandler
 
 config_parser = configparser.ConfigParser()
 config_parser.read('/home/skartavykh/PycharmProjects/advanced-media/development.ini')
+
+
+class Topic:
+    pass
+
+
+def get_main_topics():
+    return [
+        'first topic',
+        'second topic',
+    ]
 
 
 class StructuredPage:
@@ -17,9 +27,11 @@ class StructuredPage:
     def form(self):
         struct = self.__parse_content()
         return struct
-
+    
     def __parse_content(self):
+        topics = get_main_topics()
         return {
+            "topics": topics,
             "page_url": "test_url",
             "info": "test_info",
         }
@@ -30,7 +42,7 @@ class PageHandler:
     def __init__(self, page_url):
         """Initialize page. Get page source HTML code."""
         self.url = page_url
-        self.content = requests.get(page_url).text
+        self.content = RequestHandler(page_url).make_request()
         self.links = []
         self.structure = StructuredPage(self.content).form()
 
@@ -59,7 +71,7 @@ class PageHandler:
 
 
 if __name__ == '__main__':
-    url = 'https://www.investing.com'
+    url = 'https://www.rbc.ru'
     google_handler = PageHandler(page_url=url)
     google_handler.write_page_source_code_to_file()
     google_handler.get_all_links_from_page()
